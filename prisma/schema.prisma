@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64"]
 }
 
 datasource db {
@@ -23,10 +24,20 @@ model Profile {
 
 model Match {
   id      String @id @default(uuid())
-  matchId String @unique
-  data    Json
+  matchId String
+  mode String
+  matchDate DateTime
+  red_rounds Int?
+  blue_rounds Int?
+  player_team String?
+  won Boolean?
+  act String
+  overview    Json
 
-  valorantProfiles ValorantProfile[]
+  valorantProfileId String
+  valorantProfile ValorantProfile @relation(fields: [valorantProfileId], references: [profileId])
+
+  @@index([valorantProfileId])
 }
 
 model ValorantProfile {
@@ -34,7 +45,7 @@ model ValorantProfile {
   username      String
   tag           String
   region        String
-  puuid         String @db.Text
+  puuid         String 
   stats ValorantStats?
 
   matches Match[]

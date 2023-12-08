@@ -22,7 +22,12 @@ const ValorantSignIn = async () => {
 
   if (account) {
     return (
-      redirect(`/valorant/accounts/${account.id}`)
+      <MessagePopUp
+        message="Already linked your valorant account"
+        action="Unlink"
+        description="Valorant account already linked to this profile."
+        accountId={profile.id}
+      />
     );
   }
 

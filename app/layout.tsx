@@ -4,6 +4,7 @@ import { Roboto_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { cn } from '@/lib/utils'
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const inter = Roboto_Mono({
   subsets: ['latin'],
@@ -24,7 +25,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={cn(
           inter.className,
-          "bg-white dark:bg-[#313338]"
+          "bg-white dark:bg-[#313338] h-full"
         )}>
           <ThemeProvider
             attribute='class'
@@ -32,7 +33,9 @@ export default function RootLayout({
             enableSystem={false}
             storageKey='valomind-theme'
           >
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
           </ThemeProvider>
         </body>
       </html>

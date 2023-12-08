@@ -1,5 +1,7 @@
 export const ValorantStatsModal = () => {
   return (
-    <div></div>
+    <div>
+      Hello
+    </div>
   );
 }

@@ -64,7 +64,7 @@ export const ValorantLinkModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post('/api/riot', values);
-
+      
       form.reset();
       router.refresh();
       window.location.reload();

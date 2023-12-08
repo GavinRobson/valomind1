@@ -1,7 +1,9 @@
+import { ValorantMatchArea } from "@/components/match/valorant-match-area";
+
 const ValorantMatchPage = () => {
   return ( 
-    <div>
-      Valorant Match Page
+    <div className="h-full items-center">
+      <ValorantMatchArea />
     </div>
    );
 }

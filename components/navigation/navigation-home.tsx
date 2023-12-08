@@ -7,7 +7,7 @@ export const NavigationHome = () => {
   const router = useRouter();
 
   const handleHome = () => {
-    return router.push('/');
+    return router.push('/valorant/home');
   }
   return (
     <div>
