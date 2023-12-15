@@ -19,7 +19,7 @@ export const ReplayHeader = () => {
         <div className="flex flex-row w-[83rem] space-x-5 justify-end absolute">
           <button
             onClick={onClick}
-            className="flex flex-row space-x-5 hover:text-[#FB5454] transition-all"
+            className="flex flex-row space-x-5 hover:text-[#FB5454] transition-all z-50"
           >
             <div>Stats View</div>
             <BarChartHorizontal />

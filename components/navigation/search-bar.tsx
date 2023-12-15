@@ -1,21 +1,66 @@
 'use client';
 
-import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
-export const SearchBar = () => {
-  const [hover, setHover] = useState(false);
+interface SearchBarProps {
+  profiles: any;
+}
 
-  const onTouchStart = () => {};
+export const SearchBar = ({ profiles }: SearchBarProps) => {
+  const [search, setSearch] = useState('');
+  const [open, setOpen] = useState(false);
+  const { replace } = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (search === '') {
+      params.delete('search');
+    } else {
+      params.set('search', search.toLowerCase());
+    }
+    replace(`${pathname}?${params}`);
+  }, [search]);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
   return (
-    <div className="relative h-full flex items-center justify-center px-2">
-      <div
-        onTouchStart={onTouchStart}
-        className="text-primary transition-all duration-200 rounded-lg hover:opacity-0"
+    <div className="h-full w-1/4 flex items-center">
+      <input
+        placeholder=" "
+        className="block rounded-md px-1 h-1/2 w-full text-xs text-white bg-neutral-700 appearance-none peer focus:outline-none focus:ring-0"
+        onChange={(ev) => setSearch(ev.target.value)}
+        onFocus={handleOpen}
+        onBlur={handleOpen}
+      />
+      <label
+        htmlFor="search"
+        className="
+        absolute 
+        text-xs 
+        text-zinc-400 
+        duration-150 
+        transform
+        -translate-y-3 
+        scale-75 
+        px-1
+        z-10 
+        peer-placeholder-shown:scale-100 
+        peer-placeholder-shown:translate-y-0 
+        peer-focus:opacity-0"
       >
-        <Search height={20} width={20} />
-      </div>
+        Search
+      </label>
     </div>
   );
 };

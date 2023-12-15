@@ -11,26 +11,28 @@ interface ReplayRoundEventsProps {
 
 export const ReplayRoundEvents = ({ roundData }: ReplayRoundEventsProps) => {
   const [round, setRound] = useState(0);
-  const router = useRouter();
+  const { replace } = useRouter();
   const pathname = usePathname();
-  const params = useSearchParams();
-  const eventQuery = params.get('event');
+  const searchParams = useSearchParams();
+  const eventQuery = searchParams.get('event');
   const event = eventQuery !== null ? parseInt(eventQuery) : 0;
-  const mode = params.get('mode');
+  const mode = searchParams.get('mode');
 
   const events = sortKillEventsWithPlantsDefuses(roundData);
 
   useEffect(() => {
-    const roundQuery = params.get('round');
+    const roundQuery = searchParams.get('round');
     const newRound = roundQuery !== null ? parseInt(roundQuery) : 0;
     setRound(newRound);
-  }, [params]);
+  }, [searchParams]);
 
   const onClick = useCallback(
     (ev: number) => (e: React.MouseEvent<HTMLElement>) => {
-      router.push(`${pathname}?mode=${mode}&round=${round}&event=${ev}`);
+      const params = new URLSearchParams(searchParams);
+      params.set('event', ev.toString());
+      replace(`${pathname}?${params.toString()}`);
     },
-    [router, pathname, mode, round]
+    [pathname, mode, round]
   );
 
   return (

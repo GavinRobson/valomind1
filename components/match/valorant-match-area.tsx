@@ -44,7 +44,7 @@ export const ValorantMatchArea = ({
         </div>
       ) : (
         <div>
-          <div className="pl-[300px] w-full h-[40px] z-0 md:flex flex-row fixed inset-x-0">
+          <div className="pl-[300px] w-full h-[40px] z-30 md:flex flex-row fixed inset-x-0">
             <MatchStatsHeader />
           </div>
           <div className="h-full fixed pt-[40px]">

@@ -60,9 +60,35 @@ model ValorantProfile {
 model ValorantStats {
   id String @id @default(uuid()) 
 
+  favoriteAgent String?
+  headhit Float?
+  favoriteWeapon String?
+  map MapStats[]
+  kills Int?
+  deaths Int?
+  assists Int?
+  currentRank Int?
+  currentLevel Int?
+  killDeath Float?
+  damageGame Float?
+  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   valorantProfileId String @unique
   valorantProfile ValorantProfile @relation(fields: [valorantProfileId], references: [id], onDelete: Cascade)
+}
+
+model MapStats {
+  id String @id @default(uuid())
+
+  mapName String?
+  winRate Int?
+  timesPlayed Int?
+  wins Int?
+  losses Int?
+
+  valorantStatsId String @unique
+  valorantStats ValorantStats @relation(fields: [valorantStatsId], references: [id])
 }

@@ -9,7 +9,6 @@ import { NavigationHome } from './navigation-home';
 import { ValorantSignInButton } from './valorant-sign-in-button';
 import { LoadStatsButton } from './load-stats-button';
 import { GameSwapHeaderItem } from './game-swap-header-item';
-import { SearchBar } from './search-bar';
 
 export const NavigationHeader = async () => {
   const profile = await currentProfile();
@@ -40,7 +39,7 @@ export const NavigationHeader = async () => {
         label="Stats"
         accountId={profile.id}
       />
-      <SearchBar />
+      <NavigationAction id="/valorant/search" label="Search" />
       <div className="flex flex-row"></div>
       <div className="space-x-5 w-full pr-3 justify-end flex flex-row">
         <div>

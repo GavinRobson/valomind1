@@ -10,7 +10,7 @@ export const MatchStatsHeader = () => {
   const pathname = usePathname();
 
   const onClick = () => {
-    router.push(`${pathname}/replay?mode=${query}`);
+    router.push(`${pathname}/replay?mode=${query}&round=0`);
   };
 
   return (

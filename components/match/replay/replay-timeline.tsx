@@ -1,12 +1,7 @@
 'use client';
 
 import { Bomb, Crosshair, Scissors, Timer } from 'lucide-react';
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 interface ReplayTimelineProps {
@@ -15,17 +10,19 @@ interface ReplayTimelineProps {
 }
 
 export const ReplayTimeline = ({ data, team }: ReplayTimelineProps) => {
-  const router = useRouter();
+  const { replace } = useRouter();
   const pathname = usePathname();
-  const params = useSearchParams();
-  const mode = params.get('mode');
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
 
-  const roundQuery = params.get('round');
+  const roundQuery = searchParams.get('round');
   const r = roundQuery !== null ? parseInt(roundQuery) : 0;
 
   const onClick = useCallback(
     (round: number) => (e: React.MouseEvent<HTMLElement>) => {
-      router.push(`${pathname}?mode=${mode}&round=${round}`);
+      const params = new URLSearchParams(searchParams);
+      params.set('round', round.toString());
+      replace(`${pathname}?${params.toString()}`);
     },
     []
   );
