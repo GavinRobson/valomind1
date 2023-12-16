@@ -1,11 +1,11 @@
 import { getProfiles } from '@/lib/get-profiles';
-import { SearchBarTest } from './search-bar-test';
+import { SearchBar } from './search-bar';
 
 export const SearchBarArea = async () => {
   const profiles = await getProfiles();
   return (
     <div className="h-full items-center">
-      <SearchBarTest profiles={profiles} />
+      <SearchBar profiles={profiles} />
     </div>
   );
 };

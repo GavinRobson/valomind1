@@ -1,5 +1,4 @@
 import { SearchBarArea } from '@/components/navigation/search-bar-area';
-import { getProfiles } from '@/lib/get-profiles';
 
 const SearchPage = () => {
   return (

@@ -1,13 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+import { useCallback, useState } from 'react';
 
 interface SearchBarProps {
   profiles: any;
@@ -15,52 +9,73 @@ interface SearchBarProps {
 
 export const SearchBar = ({ profiles }: SearchBarProps) => {
   const [search, setSearch] = useState('');
-  const [open, setOpen] = useState(false);
-  const { replace } = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (search === '') {
-      params.delete('search');
-    } else {
-      params.set('search', search.toLowerCase());
-    }
-    replace(`${pathname}?${params}`);
-  }, [search]);
+  const handleClick = useCallback(
+    (id: string) => (e: React.MouseEvent<HTMLElement>) => {
+      console.log('hello');
+      router.push(`/valorant/stats/account/${id}`);
+    },
+    [pathname]
+  );
 
-  const handleOpen = () => {
-    setOpen(!open);
-  };
+  console.log(profiles);
 
   return (
-    <div className="h-full w-1/4 flex items-center">
-      <input
-        placeholder=" "
-        className="block rounded-md px-1 h-1/2 w-full text-xs text-white bg-neutral-700 appearance-none peer focus:outline-none focus:ring-0"
-        onChange={(ev) => setSearch(ev.target.value)}
-        onFocus={handleOpen}
-        onBlur={handleOpen}
-      />
-      <label
-        htmlFor="search"
-        className="
-        absolute 
-        text-xs 
+    <div className="flex flex-col h-full items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-1/4 h-full flex items-center rounded-md pt-10">
+          <input
+            placeholder=" "
+            className="block rounded-md w-full px-4 pt-4 h-[50px] text-sm text-white bg-neutral-700 appearance-none peer focus:outline-none focus:ring-0"
+            onChange={(ev) => setSearch(ev.target.value)}
+            id="search"
+          />
+          <label
+            htmlFor="search"
+            className="
+        
+        absolute
+        text-md
         text-zinc-400 
         duration-150 
         transform
         -translate-y-3 
         scale-75 
-        px-1
-        z-10 
+        px-2
+        z-10
+        cursor-text
         peer-placeholder-shown:scale-100 
         peer-placeholder-shown:translate-y-0 
-        peer-focus:opacity-0"
-      >
-        Search
-      </label>
+        peer-focus:-translate-y-3
+        peer-focus:scale-75
+        peer-focus:-translate-x-3
+        "
+          >
+            Search Profiles
+          </label>
+        </div>
+      </div>
+      {search !== '' ? (
+        <div className="flex flex-col w-1/4 h-full pt-2 items-center">
+          {profiles.map((profile: any) => {
+            if (
+              profile.valorantProfile.username
+                .toLowerCase()
+                .substring(0, search.length)
+                .includes(search.toLowerCase())
+            ) {
+              return (
+                <button
+                  onClick={handleClick(profile.id)}
+                  className="h-[50px] w-full bg-neutral-500 items-center flex justify-center"
+                >{`${profile.valorantProfile.username}#${profile.valorantProfile.tag}`}</button>
+              );
+            }
+          })}
+        </div>
+      ) : null}
     </div>
   );
 };
