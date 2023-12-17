@@ -4,7 +4,6 @@ import { redirectToSignIn } from "@clerk/nextjs";
 
 import { initialProfile } from "@/lib/initial-profile";
 import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
 
 
 const ValorantSignIn = async () => {
@@ -33,5 +32,5 @@ const ValorantSignIn = async () => {
 
   return <ValorantLinkModal />
 }
- 
+
 export default ValorantSignIn;

@@ -44,8 +44,13 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
   const valorantProfile = await response.json();
 
   const stats: any = [];
+  const characterCounts: { [seasonId: string]: { [characterId: string]: number } } = {};
+
   let current = 0;
   valorantMatches.map((match: any, i: number) => {
+    if (!characterCounts[match.overview.meta.season.id]) {
+      characterCounts[match.overview.meta.season.id] = {};
+    }
     if (i === 0) {
       stats.push({
         season: match.overview.meta.season.id,
@@ -64,7 +69,14 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
           {
             map: match.overview.meta.map.name,
             won: match.won,
-            character: match.overview.stats.character.id,
+            character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+            kills: match.overview.stats.kills,
+            deaths: match.overview.stats.deaths,
+            assists: match.overview.stats.assists,
+            damageOut: match.overview.stats.damage.made,
+            damageIn: match.overview.stats.damage.received,
+            headshots: match.overview.stats.shots.head,
+            totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
           },
         ],
       });
@@ -86,9 +98,17 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
           {
             map: match.overview.meta.map.name,
             won: match.won,
-            character: match.overview.stats.character.id,
+            character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+            kills: match.overview.stats.kills,
+            deaths: match.overview.stats.deaths,
+            assists: match.overview.stats.assists,
+            damageOut: match.overview.stats.damage.made,
+            damageIn: match.overview.stats.damage.received,
+            headshots: match.overview.stats.shots.head,
+            totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
           },
         ],
+        mostPlayedCharacter: { name: null, id: null },
       });
       current++;
     } else {
@@ -102,9 +122,36 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
         match.overview.stats.shots.head +
         match.overview.stats.shots.body +
         match.overview.stats.shots.leg;
-      stats[current].maps.push({ map: match.overview.meta.map.name });
+      stats[current].maps.push({
+        map: match.overview.meta.map.name,
+        won: match.won,
+        character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+        kills: match.overview.stats.kills,
+        deaths: match.overview.stats.deaths,
+        assists: match.overview.stats.assists,
+        damageOut: match.overview.stats.damage.made,
+        damageIn: match.overview.stats.damage.received,
+        headshots: match.overview.stats.shots.head,
+        totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
+      });
+    }
+
+    if (!characterCounts[match.overview.meta.season.id][match.overview.stats.character.id]) {
+      characterCounts[match.overview.meta.season.id][match.overview.stats.character.id] = 1;
+    } else {
+      characterCounts[match.overview.meta.season.id][match.overview.stats.character.id]++;
     }
   });
+
+  for (const seasonId in characterCounts) {
+    const characters = characterCounts[seasonId];
+    const mostPlayedCharacterId = Object.keys(characters).reduce((a, b) => characters[a] > characters[b] ? a : b);
+
+    // Add most played character information to stats
+    const seasonIndex = stats.findIndex((s: any) => s.season === seasonId);
+    stats[seasonIndex].mostPlayedCharacter = { id: mostPlayedCharacterId, name: null }; // Replace 'name' with the actual name if available
+  }
+  console.log(stats[0])
 
   stats.push({ rank: rankData.data.currenttier });
 

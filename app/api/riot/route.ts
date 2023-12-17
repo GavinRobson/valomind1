@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { currentProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
-import axios from "axios";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +8,7 @@ export async function POST(req: Request) {
     const response = await fetch(`https://api.henrikdev.xyz/valorant/v1/account/${username}/${tag}`);
     const data = await response.json();
 
-    if (data.errors) { 
+    if (data.errors) {
       return new NextResponse(`${data.erros.message}`, { status: data.status });
     }
 
@@ -25,7 +24,7 @@ export async function POST(req: Request) {
       console.error("This Valorant account is already linked to an account.");
       return null;
     }
- 
+
     const profile = await currentProfile();
 
     if (!profile) {

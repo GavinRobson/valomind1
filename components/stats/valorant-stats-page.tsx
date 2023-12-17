@@ -38,7 +38,7 @@ export const ValorantStatsPage = async ({
   }
 
   const headerData = await fetch(
-    `https://valorant-api.com/v1/agents/${data[0].maps[0].character}`
+    `https://valorant-api.com/v1/agents/${data[0].mostPlayedCharacter.id}`
   );
 
   const headerImg = await headerData.json();

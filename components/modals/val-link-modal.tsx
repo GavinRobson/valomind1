@@ -64,7 +64,7 @@ export const ValorantLinkModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post('/api/riot', values);
-      
+
       form.reset();
       router.refresh();
       window.location.reload();
@@ -72,22 +72,22 @@ export const ValorantLinkModal = () => {
     } catch (error: any) {
       console.log(error);
     }
-  } 
+  }
 
   if (!isMounted) {
     return null;
   }
 
-  return ( 
+  return (
     <Dialog open>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <Image
-        src='/images/valorant-logo.png'
-        alt="Logo"
-        width={100}
-        height={100}
-        className="mt-5 mx-auto"
-      />
+          src='/images/valorant-logo.png'
+          alt="Logo"
+          width={100}
+          height={100}
+          className="mt-5 mx-auto"
+        />
         <DialogHeader className="pt-2 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
             Link your Valorant account
@@ -184,6 +184,6 @@ export const ValorantLinkModal = () => {
         </Form>
       </DialogContent>
     </Dialog>
-   );
+  );
 }
 
