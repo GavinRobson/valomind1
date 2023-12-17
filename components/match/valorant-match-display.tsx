@@ -35,14 +35,14 @@ export const ValorantMatch = ({ matchData, puuid }: ValorantMatchProps) => {
     currentTeam === 'Blue'
       ? matchData.data.players.red
       : matchData.data.players.blue;
-  const team1_average_rank = Math.round(
-    team.reduce((acc: number, player: any) => acc + player.currenttier, 0) /
-      team.length
-  );
-  const team2_average_rank = Math.round(
-    team0.reduce((acc: number, player: any) => acc + player.currenttier, 0) /
-      team0.length
-  );
+  // const team1_average_rank = Math.round(
+  //   team.reduce((acc: number, player: any) => acc + player.currenttier, 0) /
+  //     team.length
+  // );
+  // const team2_average_rank = Math.round(
+  //   team0.reduce((acc: number, player: any) => acc + player.currenttier, 0) /
+  //     team0.length
+  // );
 
   const partyCombinations = getPartyCombinations(all_players, currentTeam);
 
