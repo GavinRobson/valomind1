@@ -5,6 +5,8 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 const inter = Roboto_Mono({
   subsets: ['latin'],
@@ -32,7 +34,9 @@ export default function RootLayout({
             enableSystem={false}
             storageKey="valomind-theme"
           >
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+                {children}
+              </TooltipProvider>
           </ThemeProvider>
         </body>
       </html>

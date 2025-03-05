@@ -6,6 +6,8 @@ import { redirectToSignIn } from '@clerk/nextjs';
 const StatsPage = async ({ params }: { params: { accountId: string } }) => {
   const profile = await currentProfile();
 
+  console.log(params.accountId);
+
   if (!profile) {
     return redirectToSignIn();
   }
@@ -13,7 +15,7 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
   const valorantMatches: any = await db.match.findMany({
     where: {
       valorantProfileId: params.accountId,
-      mode: 'competitive',
+      mode: 'Competitive',
     },
     orderBy: {
       matchDate: 'desc',
@@ -32,11 +34,11 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
   const region = valorantMatches[0].overview.meta.region;
 
   const response = await fetch(
-    `https://api.henrikdev.xyz/valorant/v1/by-puuid/account/${puuid}`
+    `https://api.henrikdev.xyz/valorant/v1/by-puuid/account/${puuid}?api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
   );
 
   const response1 = await fetch(
-    `https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/${region}/${puuid}`
+    `https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr/${region}/${puuid}?api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
   );
 
   const rankData = await response1.json();
@@ -44,7 +46,9 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
   const valorantProfile = await response.json();
 
   const stats: any = [];
-  const characterCounts: { [seasonId: string]: { [characterId: string]: number } } = {};
+  const characterCounts: {
+    [seasonId: string]: { [characterId: string]: number };
+  } = {};
 
   let current = 0;
   valorantMatches.map((match: any, i: number) => {
@@ -69,14 +73,20 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
           {
             map: match.overview.meta.map.name,
             won: match.won,
-            character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+            character: {
+              id: match.overview.stats.character.id,
+              name: match.overview.stats.character.name,
+            },
             kills: match.overview.stats.kills,
             deaths: match.overview.stats.deaths,
             assists: match.overview.stats.assists,
             damageOut: match.overview.stats.damage.made,
             damageIn: match.overview.stats.damage.received,
             headshots: match.overview.stats.shots.head,
-            totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
+            totalshots:
+              match.overview.stats.shots.head +
+              match.overview.stats.shots.body +
+              match.overview.stats.shots.leg,
           },
         ],
       });
@@ -98,14 +108,20 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
           {
             map: match.overview.meta.map.name,
             won: match.won,
-            character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+            character: {
+              id: match.overview.stats.character.id,
+              name: match.overview.stats.character.name,
+            },
             kills: match.overview.stats.kills,
             deaths: match.overview.stats.deaths,
             assists: match.overview.stats.assists,
             damageOut: match.overview.stats.damage.made,
             damageIn: match.overview.stats.damage.received,
             headshots: match.overview.stats.shots.head,
-            totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
+            totalshots:
+              match.overview.stats.shots.head +
+              match.overview.stats.shots.body +
+              match.overview.stats.shots.leg,
           },
         ],
         mostPlayedCharacter: { name: null, id: null },
@@ -125,33 +141,52 @@ const StatsPage = async ({ params }: { params: { accountId: string } }) => {
       stats[current].maps.push({
         map: match.overview.meta.map.name,
         won: match.won,
-        character: { id: match.overview.stats.character.id, name: match.overview.stats.character.name },
+        character: {
+          id: match.overview.stats.character.id,
+          name: match.overview.stats.character.name,
+        },
         kills: match.overview.stats.kills,
         deaths: match.overview.stats.deaths,
         assists: match.overview.stats.assists,
         damageOut: match.overview.stats.damage.made,
         damageIn: match.overview.stats.damage.received,
         headshots: match.overview.stats.shots.head,
-        totalshots: match.overview.stats.shots.head + match.overview.stats.shots.body + match.overview.stats.shots.leg,
+        totalshots:
+          match.overview.stats.shots.head +
+          match.overview.stats.shots.body +
+          match.overview.stats.shots.leg,
       });
     }
 
-    if (!characterCounts[match.overview.meta.season.id][match.overview.stats.character.id]) {
-      characterCounts[match.overview.meta.season.id][match.overview.stats.character.id] = 1;
+    if (
+      !characterCounts[match.overview.meta.season.id][
+        match.overview.stats.character.id
+      ]
+    ) {
+      characterCounts[match.overview.meta.season.id][
+        match.overview.stats.character.id
+      ] = 1;
     } else {
-      characterCounts[match.overview.meta.season.id][match.overview.stats.character.id]++;
+      characterCounts[match.overview.meta.season.id][
+        match.overview.stats.character.id
+      ]++;
     }
   });
 
   for (const seasonId in characterCounts) {
     const characters = characterCounts[seasonId];
-    const mostPlayedCharacterId = Object.keys(characters).reduce((a, b) => characters[a] > characters[b] ? a : b);
+    const mostPlayedCharacterId = Object.keys(characters).reduce((a, b) =>
+      characters[a] > characters[b] ? a : b
+    );
 
     // Add most played character information to stats
     const seasonIndex = stats.findIndex((s: any) => s.season === seasonId);
-    stats[seasonIndex].mostPlayedCharacter = { id: mostPlayedCharacterId, name: null }; // Replace 'name' with the actual name if available
+    stats[seasonIndex].mostPlayedCharacter = {
+      id: mostPlayedCharacterId,
+      name: null,
+    }; // Replace 'name' with the actual name if available
   }
-  console.log(stats[0])
+  console.log(stats[0]);
 
   stats.push({ rank: rankData.data.currenttier });
 

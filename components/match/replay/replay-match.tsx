@@ -256,8 +256,10 @@ function getMapSource(mapName: string) {
     return 'https://media.valorant-api.com/maps/fd267378-4d1d-484f-ff52-77821ed10dc2/displayicon.png';
   } else if (mapName == 'Icebox') {
     return 'https://media.valorant-api.com/maps/e2ad5c54-4114-a870-9641-8ea21279579a/displayicon.png';
-  } else {
+  } else if (mapName == 'Haven') {
     return 'https://media.valorant-api.com/maps/2bee0dc9-4ffe-519b-1cbd-7fbe763a6047/displayicon.png';
+  } else if (mapName == 'Abyss') {
+    return 'https://media.valorant-api.com/maps/224b0a95-48b9-f703-1bd8-67aca101a61f/displayicon.png'
   }
 }
 
@@ -311,7 +313,7 @@ function sortKillEventsWithPlantsDefuses(round: any): any[] {
 function getMapLocations(map: string) {
   if (map === 'Ascent') {
     return {
-      Multiplier: 0.00007,
+      xMultiplier: 0.00007,
       yMultiplier: -0.00007,
       xScalarToAdd: 0.813895,
       yScalarToAdd: 0.573242,
@@ -388,5 +390,13 @@ function getMapLocations(map: string) {
       xScalarToAdd: 1.09345,
       yScalarToAdd: 0.642728,
     };
+  }
+  if (map === 'Abyss') {
+    return {
+      xMultiplier: 0.000081,
+      yMultiplier: -0.000081,
+      xScalarToAdd: 0.5,
+      yScalarToAdd: 0.5,
+    }
   }
 }

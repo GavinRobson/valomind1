@@ -7,6 +7,7 @@ import { currentProfile } from '@/lib/current-profile';
 import { StatsPlaylists } from './stats-playlists';
 import { PlayerHeader } from './player-header';
 import { ScrollArea } from '../ui/scroll-area';
+import Footer from '../navigation/footer';
 
 export const ValorantStatsPage = async ({
   data,
@@ -51,30 +52,33 @@ export const ValorantStatsPage = async ({
   const levelImg = border.levelNumberAppearance;
 
   return (
-    <ScrollArea className="absolute h-screen w-full">
-      <PlayerHeader
-        headerImg={headerImg}
-        data={{ card, rank, borderImg, levelImg }}
-      />
-      <div
-        style={{ width: 'calc(100% - 2rem)' }}
-        className="flex flex-col space-y-4 px-[15%] h-full w-full py-6"
-      >
+    <>
+      <ScrollArea className="absolute h-screen w-full">
+        <PlayerHeader
+          headerImg={headerImg}
+          data={{ card, rank, borderImg, levelImg }}
+        />
         <div
           style={{ width: 'calc(100% - 2rem)' }}
-          className="h-full grid grid-cols-3 gap-6"
+          className="flex flex-col space-y-4 px-[15%] h-full w-full py-6"
         >
-          <div className="bg-white text-black flex justify-center p-4 rounded-md">
-            Acts
-          </div>
-          <div className="bg-white text-black flex flex-row p-4 rounded-md">
-            Rank: Diamond 1
-          </div>
-          <div className="bg-white text-black flex flex-col p-4 items-center rounded-md">
-            <h1>Recent Matches</h1>
+          <div
+            style={{ width: 'calc(100% - 2rem)' }}
+            className="h-full grid grid-cols-3 gap-6"
+          >
+            <div className="bg-white text-black flex justify-center p-4 rounded-md">
+              Acts
+            </div>
+            <div className="bg-white text-black flex flex-row p-4 rounded-md">
+              Rank: Diamond 1
+            </div>
+            <div className="bg-white text-black flex flex-col p-4 items-center rounded-md">
+              <h1>Recent Matches</h1>
+            </div>
           </div>
         </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    <Footer />
+    </>
   );
 };

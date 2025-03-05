@@ -1,22 +1,26 @@
-import { currentProfile } from "@/lib/current-profile";
-import { currentValorant } from "@/lib/current-valorant";
-import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { currentProfile } from '@/lib/current-profile';
+import { currentValorant } from '@/lib/current-valorant';
+import { db } from '@/lib/db';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
     const { profileId, puuid, region } = await req.json();
-    const response = await fetch(`https://api.henrikdev.xyz/valorant/v1/by-puuid/lifetime/matches/${region}/${puuid}`);
+    const response = await fetch(
+      `https://api.henrikdev.xyz/valorant/v1/by-puuid/lifetime/matches/${region}/${puuid}?api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
+    );
     const matchJson = await response.json();
 
     if (matchJson.errors) {
-      return new NextResponse(`${matchJson.errors.message}`, { status: matchJson.status });
+      return new NextResponse(`${matchJson.errors.message}`, {
+        status: matchJson.status,
+      });
     }
 
     const profile = await currentProfile();
 
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const valorant = await currentValorant(profile.id);
@@ -39,7 +43,7 @@ export async function POST(req: Request) {
         where: {
           matchId: matchJson.data[i].meta.id,
           valorantProfileId: profileId,
-        }
+        },
       });
 
       if (existingMatch) {
@@ -47,11 +51,16 @@ export async function POST(req: Request) {
       }
 
       const won =
-        matchJson.data[i].stats.team === 'Blue' && matchJson.data[i].teams.blue > matchJson.data[i].teams.red ? true :
-          matchJson.data[i].stats.team === 'Red' && matchJson.data[i].teams.red > matchJson.data[i].teams.blue ? true :
-            matchJson.data[i].teams.red === matchJson.data[i].teams.blue ? null : false;
-  
-      
+        matchJson.data[i].stats.team === 'Blue' &&
+        matchJson.data[i].teams.blue > matchJson.data[i].teams.red
+          ? true
+          : matchJson.data[i].stats.team === 'Red' &&
+            matchJson.data[i].teams.red > matchJson.data[i].teams.blue
+          ? true
+          : matchJson.data[i].teams.red === matchJson.data[i].teams.blue
+          ? null
+          : false;
+
       data.push({
         matchId: matchJson.data[i].meta.id,
         mode: matchJson.data[i].meta.mode,
@@ -70,7 +79,7 @@ export async function POST(req: Request) {
 
     const matches = await db.match.createMany({
       data,
-      skipDuplicates: true
+      skipDuplicates: true,
     });
 
     console.log(matches);
@@ -78,6 +87,6 @@ export async function POST(req: Request) {
     return NextResponse.json(matches);
   } catch (error) {
     console.error(error);
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }

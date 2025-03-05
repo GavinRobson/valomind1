@@ -3,7 +3,7 @@
 import { Users2 } from 'lucide-react';
 import Image from 'next/image';
 
-import rankData from '@/rank-data.json';
+import rankData from '@/rankData.json';
 import {
   Tooltip,
   TooltipContent,

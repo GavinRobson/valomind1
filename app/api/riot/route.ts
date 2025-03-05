@@ -1,11 +1,13 @@
-import { NextResponse } from "next/server"
-import { currentProfile } from "@/lib/current-profile"
-import { db } from "@/lib/db"
+import { NextResponse } from 'next/server';
+import { currentProfile } from '@/lib/current-profile';
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
     const { username, tag, region } = await req.json();
-    const response = await fetch(`https://api.henrikdev.xyz/valorant/v1/account/${username}/${tag}`);
+    const response = await fetch(
+      `https://api.henrikdev.xyz/valorant/v1/account/${username}/${tag}?api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
+    );
     const data = await response.json();
 
     if (data.errors) {
@@ -16,29 +18,29 @@ export async function POST(req: Request) {
 
     const existingValorantAccount = await db.valorantProfile.findFirst({
       where: {
-        puuid
-      }
+        puuid,
+      },
     });
 
     if (existingValorantAccount) {
-      console.error("This Valorant account is already linked to an account.");
+      console.error('This Valorant account is already linked to an account.');
       return null;
     }
 
     const profile = await currentProfile();
 
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const existingRiot = await db.valorantProfile.findFirst({
       where: {
-        profileId: profile.id
-      }
+        profileId: profile.id,
+      },
     });
 
     if (existingRiot) {
-      console.error("Profile already has Valorant linked");
+      console.error('Profile already has Valorant linked');
       return null;
     }
 
@@ -49,13 +51,13 @@ export async function POST(req: Request) {
         tag,
         region,
         puuid,
-      }
+      },
     });
 
     return NextResponse.json(valorantLink);
   } catch (error) {
-    console.log("[RIOT_POST]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.log('[RIOT_POST]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }
 
@@ -66,19 +68,19 @@ export async function DELETE(req: Request) {
     const profile = await currentProfile();
 
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const valorantDelete = await db.valorantProfile.delete({
       where: {
         id: accountId,
         profileId: profile.id,
-      }
+      },
     });
 
     return NextResponse.json(valorantDelete);
   } catch (error) {
-    console.log("[RIOT_DELETE]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.log('[RIOT_DELETE]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }

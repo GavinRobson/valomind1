@@ -1,3 +1,4 @@
+import Loading from "@/app/loading";
 import { MatchOverviewHeader } from "@/components/match/match-overview-header";
 import { MatchSidebar } from "@/components/match/match-sidebar";
 import React from "react";
@@ -16,12 +17,12 @@ const ValorantMatchLayout = ({
           params={params}
         />
       </div>
-      <div className="hidden h-full pt-[60px] w-[300px] z-20 md:flex flex-col fixed inset-y-0">
+      <div className="hidden h-screen pt-[60px] w-[300px] z-20 md:flex flex-col fixed inset-y-0">
         <MatchSidebar
           params={params}
         />
       </div>
-      <div className="fixed h-full ml-[300px] pt-[60px]">
+      <div className="fixed h-screen ml-[300px] pt-[60px]">
         {children}
       </div>  
     </div>

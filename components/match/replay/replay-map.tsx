@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronUpCircle, Scissors } from 'lucide-react';
+import { X, Scissors } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -79,7 +79,10 @@ export const ReplayMap = ({
 
   const events = sortKillEventsWithPlantsDefuses(roundData);
   const eventData = events[event];
+
   const player_locations = eventData.player_locations_on_kill;
+
+  console.log(mapData);
 
   if (eventData.event === 'start') {
     return (
@@ -263,7 +266,17 @@ export const ReplayMap = ({
       </div>
     );
   }
-
+  console.log(eventData);
+  const victim_x_pos =
+    eventData.victim_death_location.y * mapData?.xMultiplier +
+    mapData?.xScalarToAdd;
+  const victim_y_pos =
+    eventData.victim_death_location.x * mapData?.yMultiplier +
+    mapData?.yScalarToAdd;
+  const victim_x = victim_x_pos * 500;
+  const victim_y = victim_y_pos * 500;
+  console.log(victim_x, victim_y);
+  const victim_color = eventData.victim_team === 'Blue' ? 'Blue' : 'Red';
   return (
     <div
       onMouseDown={handleMouseDown}
@@ -288,7 +301,17 @@ export const ReplayMap = ({
           height={500}
           className="relative z-0"
         />
+
         <div className="w-[500px] h-[500px] absolute -top-1 -left-1">
+          <div className="absolue z-10 text-white items-center justify-center">
+            <X
+              style={{ left: victim_x, top: victim_y }}
+              className="absolute z-20"
+              color={victim_color === 'Blue' ? '#7AE582' : '#FB5454'}
+              width={20}
+              height={20}
+            />
+          </div>
           {player_locations.map((player: any) => {
             const x_pos =
               player.location.y * mapData?.xMultiplier + mapData?.xScalarToAdd;

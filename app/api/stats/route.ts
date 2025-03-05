@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const response = await fetch(
-      `https://api.henrikdev.xyz/valorant/v1/by-puuid/lifetime/matches/${region}/${puuid}?mode=competitive`
+      `https://api.henrikdev.xyz/valorant/v1/by-puuid/lifetime/matches/${region}/${puuid}?mode=competitive&api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
     );
     const data = await response.json();
 

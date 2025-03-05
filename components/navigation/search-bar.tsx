@@ -60,6 +60,7 @@ export const SearchBar = ({ profiles }: SearchBarProps) => {
       {search !== '' ? (
         <div className="flex flex-col w-1/4 h-full pt-2 items-center">
           {profiles.map((profile: any) => {
+            console.log(profile)
             if (
               profile.valorantProfile.username
                 .toLowerCase()

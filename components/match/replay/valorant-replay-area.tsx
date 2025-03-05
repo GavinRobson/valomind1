@@ -19,7 +19,9 @@ export const ValorantReplayArea = ({
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://api.henrikdev.xyz/valorant/v2/match/${matchId}`)
+    fetch(
+      `https://api.henrikdev.xyz/valorant/v2/match/${matchId}?api_key=HDEV-162bdfe4-d0a6-48c4-8ea6-f0cf5b907473`
+    )
       .then((res) => res.json())
       .then((data) => {
         setReplayData(data);
